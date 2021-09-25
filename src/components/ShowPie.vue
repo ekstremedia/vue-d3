@@ -5,12 +5,11 @@
     <h4>Most popular female names in the world</h4>
     <pie :data="names" />
     <br>
-    <button v-if="canAddAName" v-on:click="addName">Add a name</button>
+    <button v-on:click="addName">Add a name</button>
   </div>
 </template>
 
 <script>
-import * as d3 from "d3";
 import * as _ from "lodash"
 import Pie from '/src/components/Pie.vue'
 
@@ -32,7 +31,7 @@ export default {
   },
   data: function() {
     return {
-      names: _.take(NAMES, 3)
+      names: _.take(NAMES, 5)
     }
   },
   computed: {

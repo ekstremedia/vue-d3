@@ -5,8 +5,9 @@
 
 <template>
     <div>
-        <router-link to="/">Go to Home</router-link>
-        <router-link to="/showpie">Pie</router-link>
+        <router-link to="/">Go to Home</router-link> -
+        <router-link to="/showpie">Pie</router-link> -
+        <router-link to="/donut">Donut</router-link>
         <router-view></router-view>
     </div>
 </template>

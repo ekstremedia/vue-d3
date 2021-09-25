@@ -1,8 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HelloWorld from '/src/components/HelloWorld.vue'
-import Pie from '/src/components/Pie.vue'
 import ShowPie from '/src/components/ShowPie.vue'
-import Donut from '/src/components/Donut.vue'
+import ShowDonut from '/src/components/ShowDonut.vue'
 const routes = [
     {
         path: '/',
@@ -15,9 +14,9 @@ const routes = [
         component: ShowPie,
     },
     {
-        path: '/donut',
-        name: 'Donut',
-        component: Donut,
+        path: '/showDonut',
+        name: 'ShowDonut',
+        component: ShowDonut,
     },
 ]
 const router = createRouter({

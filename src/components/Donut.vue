@@ -1,6 +1,8 @@
 <template>
     <div>
         <svg id="donut" width="400" height="400"></svg>
+        <button @click="drawChart(data)">drawChart</button>
+        <button @click="data = ['']">changedata</button>
     </div>
 </template>
 
@@ -10,7 +12,7 @@ export default {
     mounted() {
         console.log("sd");
 
-        var svg = d3.select('#donut');
+        var svg = d3.select("#donut");
         var width = +svg.attr("width");
         var height = +svg.attr("height");
         var margin = { top: 20, left: 0, bottom: 30, right: 0 };
@@ -34,7 +36,15 @@ export default {
         console.log("data", this.data);
         this.drawChart(this.data);
     },
-    props: ["data"],
+    props: {
+        data: Array,
+    },
+    watch: {
+        data(newData) {
+            console.log("datra chagnes");
+            this.drawChart(newData);
+        },
+    },
     methods: {
         drawChart: function (data) {
             var arcs = d3
@@ -54,9 +64,15 @@ export default {
                 })
                 .attr("stroke", "gray")
                 .attr("fill", (d) => {
-                    if (d.data.name === "Ubehandlet") { return "#F00"; }
-                    if (d.data.name === "Under behandling") { return "blue"; }
-                    if (d.data.name === "På vent") { return "orange"; }
+                    if (d.data.name === "Ubehandlet") {
+                        return "#F00";
+                    }
+                    if (d.data.name === "Under behandling") {
+                        return "blue";
+                    }
+                    if (d.data.name === "På vent") {
+                        return "orange";
+                    }
                 });
             newBlock
                 .append("text")

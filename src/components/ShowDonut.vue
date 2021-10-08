@@ -1,9 +1,11 @@
 <template>
-    <div>
-        ShowDonutzs
-        <donut :data="names"></donut>
-        <button @click="changeValues">Endre verdier</button>
-    </div>
+  <div>
+    ShowDonutzs
+    <donut :data="names" />
+    <button @click="changeValues">
+      Endre verdier
+    </button>
+  </div>
 </template>
 <script>
 import Donut from "/src/components/Donut.vue";
@@ -13,20 +15,16 @@ let nameList = [
     { name: "På vent", value: 3 },
 ];
 export default {
-    data() {
-        return {
-            names: [
-            { name: "Ubehandlet", value: 12 },
-            { name: "Under behandling", value: 4 },
-            { name: "På vent", value: 3 }
-            ]
-        }
-    },
     components: {
         donut: Donut,
     },
+    data() {
+        return {
+            names: nameList
+        }
+    },
     mounted() {
-        // this.names = 
+        // this.names =
     },
     methods: {
         changeValues() {

@@ -1,11 +1,9 @@
 <template>
   <div class="text-center">
-    ShowDonutzs
-    <animated-donut :data="names" />
-
-    <button @click="changeValues">
-      v
-    </button>
+    <animated-donut
+      :data="names"
+      :pie-width="300"
+    />
   </div>
 </template>
 <script>

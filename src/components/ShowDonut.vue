@@ -1,6 +1,5 @@
 <template>
   <div>
-    ShowDonutzs
     <donut :data="names" />
     <button @click="changeValues">
       Endre verdier

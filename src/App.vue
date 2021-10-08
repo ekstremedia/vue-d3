@@ -10,7 +10,10 @@ const routes = window.routes;
       <nav class="flex items-center justify-between flex-wrap p-6">
         <div class="w-full block flex-grow lg:flex lg:items-center lg:w-auto">
           <div class="text-sm lg:flex-grow">
-            <span v-for="route in routes">
+            <span
+              v-for="route in routes"
+              :key="route.path"
+            >
               <router-link :to="route.path"> {{ route.name }} </router-link> |
             </span>
           </div>

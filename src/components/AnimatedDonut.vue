@@ -1,9 +1,20 @@
 <template>
   <div id="donut" />
+  <main>
+    <section>
+      <figure>
+        <svg />
+      </figure>
+    </section>
+    <button type="button">
+      Swap data
+    </button>
+  </main>
 </template>
 
 <script>
 import * as d3 from "d3";
+import {arc, pie, select, sum, interpolate} from "d3";
 // https://observablehq.com/@d3/donut-chart
 export default {
     props: {
@@ -11,80 +22,76 @@ export default {
     },
     data() {
         return {
-            pieData: {a: 9, b: 20, c: 32}
+            pieData: []
         }
     },
     watch: {},
+    methods: {
+        generateData() {
+            this.pieData = [Math.random(50), Math.random(50), Math.random(50)]
+        }
+    },
     mounted() {
-        // set the dimensions and margins of the graph
-        const width = 450,
-            height = 450,
-            margin = 40;
-
-        // The radius of the pieplot is half the width or half the height (smallest one). I subtract a bit of margin.
-        const radius = Math.min(width, height) / 2 - margin
-
-        // append the svg object
-        const svg = d3.select("#donut")
-            .append("svg")
-            .attr("width", width)
-            .attr("height", height)
-            .append("g")
-            .attr("transform", `translate(${width / 2},${height / 2})`);
-
-        // Create dummy data
-        let data = this.pieData
-
-        // set the color scale
-        const color = d3.scaleOrdinal()
-            .range(["#DD5A43", "#478FCA", "#ff892a"])
-
-        // Compute the position of each group on the pie:
-        const pie = d3.pie()
-            .value(d => d[1])
-
-        const data_ready = pie(Object.entries(data))
-
-        // Build the pie chart: Basically, each part of the pie is a path that we build using the arc function.
-        svg
-            .selectAll('whatever')
-            .data(data_ready)
-            .join('path')
-            .attr('d', d3.arc()
-                .innerRadius(100)         // This is the size of the donut hole
-                .outerRadius(radius)
-            )
-            .attr('fill', d => color(d.data[0]))
-        .attr('fill')
-            // .attr("stroke", "black")
-            // .style("stroke-width", "2px")
-            // .style("opacity", 0.7)
 
 
+        this.generateData()
+        const data = this.pieData;
+        const total = sum(data);
+        const width = select("svg").node().clientWidth;
 
+        const svgs = select("section")
+            .select("svg")
+            .style("height", `${width}px`);
 
-        function render(){
-            // generate new random data
-            data = this.pieData
+        svgs.append("g").attr("transform", `translate(${width / 2}, ${width / 2})`);
 
-            // add any new pie segments
-            .datum(data).selectAll("path")
-                .data(pie)
-                .enter().append("path")
-                .attr("class","piechart")
-                .attr("fill", function(d,i){ return color(i); })
-                .attr("d", arc)
-                .each(function(d){ this._current = d; })
+        const colors = "#DD5A43 #478FCA #ff892a".split(" ");
 
-            // remove data not used
-            g.datum(data).selectAll("path")
-                .data(pie).exit().remove();
+        const sectorArc = arc()
+            .innerRadius(width / 4)
+            .outerRadius(width / 2.3);
+
+        const tweens = [
+            function (sectorData) {
+                const interpolator = interpolate(this._current, sectorData);
+                this._current = interpolator(0);
+                return t => sectorArc(interpolator(t));
+            }
+        ];
+
+        function drawCharts(data) {
+            const pieData = pie().sort(null)(data);
+            svgs.each(function (_, index) {
+                const svg = select(this);
+                const sectors = svg
+                    .select("g")
+                    .selectAll("path")
+                    .data(pieData);
+
+                sectors
+                    .enter()
+                    .append("path")
+                    .attr("fill", (_, i) => colors[i])
+                    .attr("d", sectorArc)
+                    .property("_current", d => d);
+
+                sectors
+                    .transition()
+                    .duration(1000)
+                    .attrTween("d", tweens[index]);
+            });
         }
 
-        setInterval(render,2000);
+        drawCharts(this.pieData);
 
-
-
+        let isEven = false;
+        select("button").on("click", () => {
+            isEven = !isEven;
+            this.generateData()
+            // this.pieData = [1,3,10]
+            drawCharts(this.pieData);
+        });
     }
+
 }
 </script>
